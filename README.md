@@ -2,6 +2,20 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+
+1.) npx create-next-app@latest --ts
+2.) npx sb init --builder webpack5
+3.) npm i react-reflex
+4.) npm i react-helmet
+5.) npm i react-leaflet
+6.) npm install -D @types/leaflet
+7.) npm i leaflet
+8.) npm install --save @fullcalendar/core @fullcalendar/react @fullcalendar/resource @fullcalendar/resource-timeline
+9.) npm install --save @emotion/react @emotion/styled @fontsource/material-icons @fontsource/roboto @mui/icons-material @mui/material
+10.) npm install --save-exact react-resizable@3.0.4 @types/react-resizable@3.0.2 --legacy-peer-deps
+11.) npm install --save-exact react-redux redux @types/react-redux redux-thunk@2.3.0 --legacy-peer-deps
+12.) npm install immer
+
 First, run the development server:
 
 ```bash
