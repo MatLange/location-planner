@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "ts-lint": "tsc --noEmit --incremental --watch",
+    "check-types": "tsc --noemit",
+    "lint": "npm run check-types && next lint",    
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -22,6 +24,7 @@
     "@fullcalendar/resource-timeline": "^6.1.7",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.0",
+    "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "20.1.2",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
@@ -38,10 +41,10 @@
     "react-dom": "18.2.0",
     "react-helmet": "^6.1.0",
     "react-leaflet": "^4.2.1",
-    "react-redux": "8.0.5",
+"react-redux": "8.0.5",
     "react-reflex": "^4.1.0",
     "react-resizable": "3.0.4",
-    "redux": "4.2.1",
+"redux": "4.2.1",
     "redux-thunk": "2.3.0",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
@@ -56,6 +59,10 @@
     "@storybook/testing-library": "^0.0.14-next.2",
     "@types/leaflet": "^1.9.3",
     "eslint-plugin-storybook": "^0.6.12",
+    "next-redux-wrapper": "^8.1.0",
+    "react-redux": "^8.0.7",
+    "redux": "^4.2.1",
+    "redux-thunk": "^2.4.2",
     "storybook": "^7.0.11"
   }
 }

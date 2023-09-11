@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, props } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import {Button} from '../stories/Button';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
