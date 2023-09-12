@@ -1,10 +1,9 @@
 "use client"
-import React, { useState } from 'react';
 import Image from 'next/image';
 import {Button} from '../stories/Button';
-import FullCalendar from '@fullcalendar/react'; // must go before plugins
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline'; // a plugin!
-import resourcePlugin from '@fullcalendar/resource'; // a plugin!
+
+import React, { useState, useEffect, createRef, useContext} from 'react';
+//import moment from 'moment';
 import 'leaflet/dist/leaflet.css';
 import 'react-reflex/styles.css'
 
@@ -30,7 +29,21 @@ import LeafletMap from "../components/LeafletMap";
 import Resizable  from "../components/Resizable";
 import dynamic from "next/dynamic";
 
+import { connect } from 'react-redux';
+import { createSelector } from "reselect";
+import actionCreators from './actions/actions';
+import { getHashValues } from './utils/utils';
 
+
+import { Provider, ReactReduxContext } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import combineReducers from './reducer/reducer';
+import { AnyCnameRecord } from 'dns';
+
+
+let store = createStore(combineReducers, applyMiddleware(thunk));
+let customContext = React.createContext(null);
 
 const HandleElement = () => {
  
@@ -49,36 +62,26 @@ const HandleElement = () => {
   )
 }
 
+
+
 class ReflexBasicDemo
   extends React.Component {
+
 
     state = {
       weekendsVisible: true,
       currentEvents: []
-    }
+    };
 
 
     render () {
 
     return (
-/*      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Resizable direction="horizontal">
-              <Calendar campaigns={campaigns} />
-
-                </Resizable>
-                <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    noWrap={true}
-                  />
-                </MapContainer>                       
-                </div>
-*/
+      <Provider store={store} context={ReactReduxContext}>      
+    <div style={{height:"100vh"}}>
        <ReflexContainer orientation="horizontal">
-
-        <ReflexElement className="top-pane">
-          <Calendar campaigns={campaigns}/>
+        <ReflexElement className="top-pane">                   
+          <Calendar  store={store} context={ReactReduxContext} campaigns={campaigns} props={this.props}/>
         </ReflexElement>
         <ReflexSplitter propagate={true}/>
       <ReflexElement minSize={36}>
@@ -88,9 +91,12 @@ class ReflexBasicDemo
         </ReflexElement>  
 
       </ReflexContainer>
+      </div>
+      </Provider>
   )
   }
 
+  
   handleEventClick = (clickInfo: EventClickArg) => {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
       clickInfo.event.remove()
@@ -102,7 +108,7 @@ class ReflexBasicDemo
       currentEvents: events
     })
   }
- 
+
 }
 
 function renderEventContent(eventContent: EventContentArg) {
@@ -114,13 +120,30 @@ function renderEventContent(eventContent: EventContentArg) {
   )
   }
 
-
-export default function Home() {
+function Home(props:any) {
 
   return (
-    <div style={{height:"100vh"}}>
-    <ReflexBasicDemo />
+    <Provider store={store} context={ReactReduxContext}>      
+      <div style={{height:"100vh"}}>
+      <ReflexBasicDemo/>
     </div>
+    </Provider>          
   );
 
 };
+
+function mapStateToProps() {
+  const getEventArray = createSelector(
+    (state: any) => state.eventsById,
+    getHashValues
+  )
+
+  return (state: any) => {
+    return {
+      events: getEventArray(state),
+      weekendsVisible: state.weekendsVisible
+    }
+  }
+}
+
+export default connect(mapStateToProps, actionCreators)(Home);
